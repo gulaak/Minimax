@@ -9,17 +9,13 @@ class Node:
         self.min = []
         self.max = []
 
-
     def __str__(self):
         return f"Data: {self.data}, Type: {self.type}"
 
 
-
-
-
 class GameTree:
-    branchFactor = 2
-    depth = 17
+    branchFactor = 3
+    depth = 4
 
     def __init__(self):
         self.root = Node(0,'max')
@@ -60,7 +56,7 @@ class GameTree:
             return
 
     def max_player(self,node):
-        if(node.type == 'utility'):
+        if node.type == 'utility':
             return node.data
         else:
             for i in node.children:
@@ -68,9 +64,8 @@ class GameTree:
             node.decision = np.argmax(node.max)
             return max(node.max)
 
-
     def min_player(self,node):
-        if(node.type == 'utility'):
+        if node.type == 'utility':
             return node.data
         else:
             for i in node.children:
@@ -79,10 +74,14 @@ class GameTree:
             return min(node.min)
 
     def mini_max(self):
-        if(self.root.type == 'max'):
+        if self.root.type == 'max':
             for i in self.root.children:
                 self.root.max.append(self.min_player(i))
             self.root.decision = np.argmax(self.root.max)
+        else:
+            for i in self.root.children:
+                self.root.min.append(self.max_player(i))
+            self.root.decision= np.argmin(self.root.min)
 
     def createPath(self):
         print('Decision: %d' %(self.root.decision))
@@ -93,6 +92,16 @@ class GameTree:
             print('Decision: %d' %(node.decision))
             self.create_Path(node.children[node.decision])
             return
+    def bfs(self):
+        for child in self.root.children:
+            self.bfs_print(child)
+
+    def bfs_print(self,node):
+        if node.type =='utility':
+            print('Utility: %d' %(node.data))
+            return
+        for child in node.children:
+            self.bfs_print(child)
 
 
 
@@ -100,25 +109,6 @@ class GameTree:
 
 
 
-
-
-
-
-
-
-
-
-
-def printInOrder(root):
-    if(root != None):
-        print_InOrder(root)
-
-
-def print_InOrder(node):
-    if(node != None):
-        print_InOrder(node.left)
-        print(node)
-        print_InOrder(node.right)
 
 
 
@@ -128,12 +118,7 @@ myTree.constructTree()
 myTree.mini_max()
 myTree.createPath()
 
-for i in myTree.root.children:
-     print(i)
-     for j in i.children:
-        print(j)
-        for x in j.children:
-            print(x)
+myTree.bfs() #prints all utility nodes at bottom depth of tree.
 
 
 
