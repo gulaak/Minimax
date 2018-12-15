@@ -92,11 +92,11 @@ class GameTree:
             print('Decision: %d' %(node.decision))
             self.create_Path(node.children[node.decision])
             return
-    def bfs(self):
+    def dfs(self):
         for child in self.root.children:
             self.bfs_print(child)
 
-    def bfs_print(self,node):
+    def dfs_print(self,node):
         if node.type =='utility':
             print('Utility: %d' %(node.data))
             return
@@ -118,7 +118,7 @@ myTree.constructTree()
 myTree.mini_max()
 myTree.createPath()
 
-myTree.bfs() #prints all utility nodes at bottom depth of tree.
+myTree.dfs() #prints all utility nodes at bottom depth of tree.
 
 
 
